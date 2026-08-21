@@ -1,45 +1,46 @@
 # Links Beta Performance Language Engine Progress
 
-**Status:** Architecture approved. The first completed-trade performance
-implementation checkpoint is complete in source and ready for external review.
-Later purpose families remain deferred.
+**Status:** The first completed-trade performance source checkpoint has passed
+its local zero-provider remediation gate. Later purpose families remain
+deferred. This is not a live Links AI Chat beta-readiness claim.
 
 **Controlling plan:** [Links Beta Performance Language Engine Plan](architecture-plan.md)
 
-**Reachable source checkpoint:** [`a5ca6b66`](https://github.com/traderslink-bot/traderlink-platform/commit/a5ca6b66b656c091e787ab7cbb50faf45867f2d4)
+**Reachable source checkpoint:** [`e287e5a7`](https://github.com/traderslink-bot/traderlink-platform/commit/e287e5a7a281cc6bfd449faffcf6263155e02a93)
 
 ## Current truth
 
-- The existing 2,985-question bank and 417-entry language inventory remain
-  source material, not a runtime-coverage claim.
-- No readiness percentage or beta-release claim has been made.
-- The first slice is intentionally limited to completed-trade P/L/outcomes,
-  counts, individual-trade ranking, calendar scope, typed plans, and
-  component-level diagnostics.
+- The complete 2,985-question bank remains the controlling inventory, not a
+  blanket runtime-coverage claim.
+- The first slice resolves only 193 completed-trade P/L/count/ranking cases.
+  The other 2,792 inventory rows are explicitly deferred rather than claimed.
+- No live readiness percentage or beta-release claim has been made.
 
-## Completed architecture checkpoint
+## Completed remediation checkpoint
 
-- [x] One beta purpose: trader performance and pattern understanding from exact
-  Journal data.
-- [x] Typed-plan, handler, collision, scope/context, deterministic rendering,
-  independent-fixture, and evaluation architecture.
-- [x] Owner approval for the architecture and first implementation slice.
+- [x] Long/short ranking is carried to both the typed plan and factual request
+  as a direction filter.
+- [x] Every master-bank row is classified as resolved, deferred, unsupported,
+  or ambiguous for the current first-slice boundary.
+- [x] Every applicable case is evaluated component by component with an
+  independent expected-plan oracle.
+- [x] Calendar month arithmetic and month-end, leap-year, year-boundary, and
+  account-timezone fixtures pass.
+- [x] The master evaluation ran with no provider calls, database access, or
+  live Links AI Chat execution.
 
-## Completed first implementation checkpoint
-
-- [x] Add selected-account reporting currency, timezone, and fixed-reference
-  time to the typed completed-trade plan.
-- [x] Add calendar scope resolution for exact named/slash/ISO days, months,
-  years, relative days, and selected scope.
-- [x] Deterministically route completed-trade P/L, trade count, win/loss
-  count, best/worst, and top/bottom individual completed-trade questions to
-  existing Journal read contracts.
-- [x] Persist the resolved typed plan and diagnostics with the deterministic
-  factual answer.
-- [x] Add 30 independently authored resolved fixtures and five collision/
-  boundary fixtures with component-level evaluation output.
-- [x] Verify the touched source with focused ESLint, TypeScript, and whitespace
-  checks without provider usage or live data execution.
+| Measure | Result |
+| --- | --- |
+| Complete master inventory classified | 2,985 / 2,985 |
+| First-slice applicable cases | 193 |
+| Resolved correctly | 193 / 193 |
+| Wrong-plan cases | 0 |
+| Silently dropped modifiers | 0 |
+| Deferred / unsupported / ambiguous | 2,792 / 0 / 0 |
+| Collision and boundary suite | PASS (5 cases) |
+| Date-edge suite | PASS (12 cases) |
+| Component evaluator | PASS (32 resolved fixtures) |
+| Provider calls during local evaluation | 0 |
 
 ## Still deliberately deferred
 
