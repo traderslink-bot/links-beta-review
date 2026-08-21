@@ -1,9 +1,9 @@
 # Links Beta Performance Language Engine Progress
 
-**Status:** Architecture plan drafted for owner review. Implementation has not
-started.
+**Status:** Architecture plan revised after external review; awaiting owner
+approval. Implementation has not started.
 
-**Controlling plan:** [Links Beta Performance Language Engine Plan](links-beta-performance-language-engine-plan.md)
+**Controlling plan:** [Links Beta Performance Language Engine Plan](architecture-plan.md)
 
 ## Current truth
 
@@ -23,8 +23,12 @@ started.
 - [x] Preserve the full existing inventory while separating the fixed beta
       denominator from deferred-purpose cases.
 - [x] Define final router outcomes, typed request-plan components, registered
-      handler validation, collision rules, defaults, ambiguity, bounded context,
-      Luna fallback validation, replay, and component-level evaluation.
+  handler validation, collision rules, defaults, ambiguity, bounded context,
+  Luna fallback validation, replay, and component-level evaluation.
+- [x] Add server-resolved selected-account, reporting-currency, timezone and
+      fixed-reference-time semantics; bounded metadata-only entity resolution;
+      lexical collision precedence; static independent expected-plan fixtures;
+      registered composite handlers; and deterministic factual rendering.
 - [x] Define the required owner-visible Links Beta Readiness dashboard and its
       release-control data.
 - [ ] Owner approves the architecture and dashboard direction.
@@ -46,5 +50,4 @@ Completed-trade performance language: P/L, gain/loss outcome, trade count,
 best/worst and top/bottom completed trades, and calendar date scope. The target
 is a validated request plan and component-level result for every case, not a
 collection of literal phrase checks.
-
 
