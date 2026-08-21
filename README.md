@@ -15,14 +15,14 @@ The beta scope is locked to completed-trade results, analytics, timing, comparis
 1. [Current architecture plan](current/architecture-plan.md)
 2. [Current progress](current/progress.md)
 3. [Source index](source-index.md)
-4. [Architecture checkpoint](checkpoints/2026-08-21-architecture.md)
+4. [Architecture checkpoint](checkpoints/2026-08-21-architecture-draft.md)
 
 ## What reviewers should verify
 
 - The request-plan router is compositional rather than a list of literal phrases.
-- Every resolved question is validated before a Journal handler runs.
+- Every resolved question is validated before a factual Journal calculation runs.
 - The full 2,985-question inventory becomes a component-level regression suite.
-- The eventual owner dashboard identifies exactly what failed: entity, metric, operation, rank/count, filters, scope, context, handler, factual response, or end-to-end persistence.
+- The eventual owner dashboard identifies exactly what failed: entity, metric, operation, rank/count, filters, account/currency scope, timezone/reference time, context, handler, factual response, or end-to-end persistence.
 - Links' beta purpose remains focused on the trader's own data and performance.
 
 Current source code implementation is intentionally not approved by this review packet. This checkpoint establishes the architecture before the router rebuild begins.
