@@ -1,53 +1,55 @@
 # Links Beta Performance Language Engine Progress
 
-**Status:** Architecture plan revised after external review; awaiting owner
-approval. Implementation has not started.
+**Status:** Architecture approved. The first completed-trade performance
+implementation checkpoint is complete in source and ready for external review.
+Later purpose families remain deferred.
 
 **Controlling plan:** [Links Beta Performance Language Engine Plan](architecture-plan.md)
 
+**Reachable source checkpoint:** [`a5ca6b66`](https://github.com/traderslink-bot/traderlink-platform/commit/a5ca6b66b656c091e787ab7cbb50faf45867f2d4)
+
 ## Current truth
 
-- The existing 2,985-question bank and 417-entry language inventory are useful
-  source material, but neither proves executable understanding.
-- The prior live Links sample exposed both deterministic successes and normal
-  provider-path failures. It is evidence that the first-purpose engine is not
-  beta-ready; it is not a coverage score.
-- No percentage in this record is a release claim until a fixed inventory
-  version, local component evaluator, handler checks, and owner-visible
-  readiness view exist.
+- The existing 2,985-question bank and 417-entry language inventory remain
+  source material, not a runtime-coverage claim.
+- No readiness percentage or beta-release claim has been made.
+- The first slice is intentionally limited to completed-trade P/L/outcomes,
+  counts, individual-trade ranking, calendar scope, typed plans, and
+  component-level diagnostics.
 
-## Architecture checkpoint
+## Completed architecture checkpoint
 
-- [x] Define the one beta purpose: trader performance and pattern understanding
-      from exact Journal data.
-- [x] Preserve the full existing inventory while separating the fixed beta
-      denominator from deferred-purpose cases.
-- [x] Define final router outcomes, typed request-plan components, registered
-  handler validation, collision rules, defaults, ambiguity, bounded context,
-  Luna fallback validation, replay, and component-level evaluation.
-- [x] Add server-resolved selected-account, reporting-currency, timezone and
-      fixed-reference-time semantics; bounded metadata-only entity resolution;
-      lexical collision precedence; static independent expected-plan fixtures;
-      registered composite handlers; and deterministic factual rendering.
-- [x] Define the required owner-visible Links Beta Readiness dashboard and its
-      release-control data.
-- [ ] Owner approves the architecture and dashboard direction.
+- [x] One beta purpose: trader performance and pattern understanding from exact
+  Journal data.
+- [x] Typed-plan, handler, collision, scope/context, deterministic rendering,
+  independent-fixture, and evaluation architecture.
+- [x] Owner approval for the architecture and first implementation slice.
 
-## Planned implementation checkpoints
+## Completed first implementation checkpoint
 
-- [ ] Build the local typed-plan contract, vocabulary registry and evaluator.
-- [ ] Implement completed-trade performance language with component diagnostics.
-- [ ] Add performance aggregates and collision coverage.
-- [ ] Add comparisons, contextual plan patches, and behavior evidence.
-- [ ] Add validated Luna plan fallback and replay records.
-- [ ] Build and obtain owner approval for the Links Beta Readiness dashboard.
-- [ ] Run owner-authorized real Links batches and make the beta decision from
-      the dashboard evidence.
+- [x] Add selected-account reporting currency, timezone, and fixed-reference
+  time to the typed completed-trade plan.
+- [x] Add calendar scope resolution for exact named/slash/ISO days, months,
+  years, relative days, and selected scope.
+- [x] Deterministically route completed-trade P/L, trade count, win/loss
+  count, best/worst, and top/bottom individual completed-trade questions to
+  existing Journal read contracts.
+- [x] Persist the resolved typed plan and diagnostics with the deterministic
+  factual answer.
+- [x] Add 30 independently authored resolved fixtures and five collision/
+  boundary fixtures with component-level evaluation output.
+- [x] Verify the touched source with focused ESLint, TypeScript, and whitespace
+  checks without provider usage or live data execution.
 
-## First implementation target after approval
+## Still deliberately deferred
 
-Completed-trade performance language: P/L, gain/loss outcome, trade count,
-best/worst and top/bottom completed trades, and calendar date scope. The target
-is a validated request plan and component-level result for every case, not a
-collection of literal phrase checks.
+- [ ] Ticker, trading-day, session, entry/exit-time, holding, and direction
+  aggregates.
+- [ ] Comparisons and contextual plan patches.
+- [ ] Rule/setup/tag/behavior evidence.
+- [ ] Luna structured-plan fallback and replay proof.
+- [ ] Owner-visible Links Beta Readiness UI and owner visual approval.
+- [ ] Owner-authorized real Links batches and the beta decision.
 
+No provider call, server process, migration, database write, new data source, or
+visible UI change was made for this checkpoint.
