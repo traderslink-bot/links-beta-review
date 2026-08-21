@@ -3,7 +3,7 @@
 **Status:** Draft for owner review. No router, provider, database, or visible
 administration change is authorized by this document alone.
 
-**Progress record:** [Links Beta Performance Language Engine Progress](links-beta-performance-language-engine-progress.md)
+**Progress record:** [Links Beta Performance Language Engine Progress](progress.md)
 
 ## 1. The single beta purpose
 
@@ -42,8 +42,14 @@ performance-language coverage.
 - The Journal remains the only authority for trading facts. Links never
   calculates from prompt text, uses arbitrary SQL, or combines currencies
   without the existing coverage contract.
-- A resolved question becomes a typed, validated request plan **before** any
-  Journal read occurs.
+- The server resolves the authenticated trader, selected Journal account,
+  account reporting currency, timezone, and one fixed request reference time
+  before interpretation. Those are trusted request context, not model choices.
+- A resolved question becomes a typed, validated request plan before any
+  **factual Journal calculation** occurs. The router may perform a bounded,
+  selected-account metadata lookup solely to resolve an exact existing rule,
+  setup, tag, or instrument name; it cannot calculate or disclose performance
+  facts at that stage.
 - A handler may execute only the canonical read contract registered for that
   request-plan family. No model output can select an unregistered operation.
 - Exact deterministic data produces the factual answer. A response template is
@@ -126,6 +132,10 @@ Every resolved plan contains only recognized values:
 ```text
 plan version
 resolution source: deterministic | llm_assisted | contextual_patch
+account scope: server-resolved selected Journal account for beta
+reporting currency: selected account's existing reporting currency
+timezone: server-resolved selected-account trading timezone
+reference time: immutable server timestamp used to resolve relative time
 entity: completed_trade | trading_day | instrument | time_bucket | rule | setup | tag | supported comparison population
 metric: registered Journal metric
 operation: summary | rank | list | detail | compare
@@ -134,7 +144,7 @@ filters: outcome, direction, ticker, session, entry/exit time, holding, setup/ta
 time scope: all history | exact day/week/month/year | rolling period | explicit range
 comparison dimensions: only registered, compatible dimensions
 conversation patch: a bounded change to a prior validated plan, when used
-handler id: one registered deterministic handler
+handler id: one registered deterministic or registered composite handler
 ```
 
 The validator rejects incompatible combinations before a handler runs. For
@@ -142,12 +152,29 @@ example, a trade row can be ranked by its factual P/L, while an instrument
 aggregate has its own grouping and metric contract. A request cannot silently
 mix the two.
 
+The first beta is deliberately selected-account scoped. A question such as
+`How much did I make today?` therefore means the trader's current selected
+account, in its normal reporting currency, without making account selection or
+foreign-exchange management a user-facing beta feature. Cross-account totals
+are unavailable until a later registered contract can prove a compatible
+currency/coverage aggregation. A simple account footer or answer context may
+say that figures use the selected account's reporting currency; it does not
+need to distract from the trading answer.
+
+Relative time is never inferred from a browser locale or a moving test clock.
+`today`, `yesterday`, `this week`, `last month`, `morning`, `after 11`, and
+similar language resolve against the plan's stored timezone and reference time.
+The exact same fixed reference context is included in local evaluation fixtures
+and recorded provider replay so a case has the same meaning months later.
+
 ### 4.3 Compositional language pipeline
 
 ```text
 current question + bounded prior validated plan
+    -> server-resolved account/currency/timezone/reference context
     -> normalization and typo tolerance
     -> vocabulary/alias recognition
+    -> bounded selected-account entity/name resolution when needed
     -> entity, metric, operation, filter, rank/count and temporal extraction
     -> defaults, collision checks and ambiguity rules
     -> validated typed request plan
@@ -186,6 +213,16 @@ Collision tests have higher precedence than generic word matching. For example:
 | `worst day` | lowest-P/L trading-day aggregate |
 | `largest drawdown` | registered drawdown metric, not a losing trade |
 
+Entity resolution has explicit lexical precedence before a generic alias can
+claim a word: an explicit `ticker`/`symbol` cue or quoted name, an exact
+selected-account rule/setup/tag/instrument name in a compatible position, a
+selected-account ticker-like token, a multi-word domain phrase, then a generic
+single-word alias. Thus a held symbol named `GAIN` in `How did I do on GAIN?`
+is an instrument, while `gain/loss` remains a metric phrase. If the evidence
+does not choose one interpretation, the request is `AMBIGUOUS`; it never falls
+through to the most convenient metric. The fixed collision suite includes
+ticker, setup, tag, rule, and ordinary-language overlaps.
+
 References with no reliable subject—such as `what was my biggest one?`—stay
 ambiguous. Links does not make a heroic guess merely because a model can invent
 one.
@@ -207,30 +244,42 @@ model never receives unrestricted history just to interpret a pronoun.
 ## 5. Handler and response contracts
 
 The handler registry maps every allowed plan family to one canonical Journal
-read. It specifies accepted components, coverage rules, output facts, and
-unavailable states. A handler returns an immutable fact packet containing only
-the values and evidence Links may state.
+read or one explicitly registered **composite handler**. A composite handler
+is an atomic, versioned contract for a standard useful summary (for example,
+P/L, trade count, win rate, average win/loss, and coverage for one ticker). It
+has an allowlisted set of canonical reads and output facts; it is not model-led
+tool selection. Every handler specifies accepted components, coverage rules,
+output facts, and unavailable states. It returns an immutable fact packet
+containing only the values and evidence Links may state.
 
-Simple answers use deterministic Links templates. A model-enhanced response is
-optional and receives only:
+Numbers, currency labels, tickers, dates, time ranges, rankings, population
+counts, coverage states, and unavailable reasons are rendered by application
+code from the fact packet. A model-enhanced response is optional and receives
+only:
 
 ```text
 validated request plan + returned fact packet + one approved voice contract
 ```
 
 It does not receive a large general tool inventory, arbitrary data access, or
-authority to change the plan. The response validator ensures every exact fact
-maps back to the packet.
+authority to change the plan. It may add only an approved non-factual
+connective sentence around the deterministic factual rendering. The response
+validator ensures every exact fact maps back to the packet.
 
 ## 6. Evaluation, replay and cost control
 
 ### 6.1 Local no-provider evaluation
 
-Every inventory case runs locally through the parser and validator. The report
-compares expected and actual values for:
+Every inventory case runs locally through the parser and validator. Its
+expected plan is a static, versioned fixture reviewed independently of the
+router/vocabulary implementation under test; evaluation never regenerates an
+expected answer from the same code it is judging. Each fixture carries the
+fixed request context required for its case, including selected-account scope,
+reporting currency context when relevant, timezone, and reference time. The
+report compares expected and actual values for:
 
 ```text
-entity | metric | operation | rank | count | filters | date scope | comparison | context patch | handler | final state
+account scope | currency scope | timezone | reference time | entity | metric | operation | rank | count | filters | date scope | comparison | context patch | handler | final state
 ```
 
 A case can therefore fail as `time filter wrong` or `handler incompatible`,
@@ -273,9 +322,9 @@ It will show:
   and Behavior Analysis;
 - resolved coverage split into deterministic, LLM-assisted and contextual
   resolution sources;
-- component coverage and failure counts for entity, metric, operation,
-  rank/count, filters, date scope, comparison, context, handler, factual
-  response, and end-to-end persistence;
+- component coverage and failure counts for account/currency scope, timezone/
+  reference time, entity, metric, operation, rank/count, filters, date scope,
+  comparison, context, handler, factual response, and end-to-end persistence;
 - a filterable case table showing the controlled test question, expected plan,
   actual plan, each component's pass/fail state, failure reason, handler,
   resolution source, latest run, and linked safe receipt metadata;
